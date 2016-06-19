@@ -22,12 +22,11 @@
   },
   "semistandard": {
     "ignore": [
-      "/src/build/",
-      "/src/js-compiled/"
+      "/src/build/"
     ],
     "globals": [
-      "jQuery",
-      "d3"
+      "jQuery"
     ]
-  }
+  },
+  "optionalDependencies": {}
 }

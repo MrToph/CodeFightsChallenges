@@ -1,7 +1,7 @@
 var gulp = require('gulp');
-var watch = require('gulp-watch');
 var path = require('path');
 var webpack = require('webpack');
+const spawn = require('child_process').spawn;
 
 var isProduction = false; // process.env.NODE_ENV ? process.env.NODE_ENV.trim() == 'production' : false,
 var serverPort = 8080;
@@ -31,7 +31,6 @@ var config = {
   resolve: {
     extensions: ['', '.js', '.jsx']
   },
-  watch: true,
   plugins: [],
   serverPort: serverPort
 };
@@ -55,3 +54,23 @@ gulp.task('build', function (done) {
     }
   });
 });
+
+gulp.task('phantom', function (done) {
+  runInPhantomJs(done);
+});
+
+function runInPhantomJs (done) {
+  var args = ['./src/js/app.jsx'];
+  var phantomjsProcess = spawn('../phantomjs/bin/phantomjs.exe', args);
+
+  phantomjsProcess.stdout.on('data', function (data) {
+    console.log(data.toString());
+  });
+
+  phantomjsProcess.on('close', function (code) {
+    console.log(code);
+    done();
+    phantomjsProcess.kill();
+  });
+
+}
