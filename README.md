@@ -1,0 +1,2 @@
+These are my solutions for some of the [CodeFight Challenges](https://codefights.com/challenges/) written in JavaScript ES2015.
+Mostly I don't try to optimize them for minimum amount of characters, and just like to come up with a solution.
