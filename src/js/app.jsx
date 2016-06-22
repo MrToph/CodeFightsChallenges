@@ -1,7 +1,6 @@
 var fs = require('fs');
-var id = 'AR4FRD52zPsnontuB';
-var descriptionPath = './challenges/';
-var jsPath = './src/solutions/';
+var id = 'gNBpsy8fob9TypF3q';
+var path = './challenges/';
 var url = 'https://codefights.com/challenge/' + id + '/main';
 
 var page = require('webpage').create();
@@ -36,7 +35,9 @@ page.onLoadFinished = function () {
     });
     description = url + '\r\n' + description;
     console.log('Parsed description.');
-    fs.write(descriptionPath + challengeName + '-' + id + '.html', description, 'w');
+    var realPath = path + challengeName + '-' + id;
+    fs.makeDirectory(realPath);
+    fs.write(realPath + '/' + 'README.md', description, 'w');
 
     // Parse code
     var code = page.evaluate(function () {
@@ -49,7 +50,7 @@ page.onLoadFinished = function () {
       return acc;
     });
     console.log('Parsed code: ' + code);
-    fs.write(jsPath + challengeName + '-' + id + '.jsx', code, 'w');
+    fs.write(realPath + '/' + challengeName + '.jsx', code, 'w');
 
     phantom.exit();
   }, 2000); // javascript on this page needs a lot of time to render

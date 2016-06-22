@@ -1,0 +1,1 @@
+function LadderGraph(N) {​}​
