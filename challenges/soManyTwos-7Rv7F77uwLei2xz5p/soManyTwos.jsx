@@ -1,4 +1,4 @@
-soManyTwos = a => (a*a*2).toString(2)
+soManyTwos = a => (a * a * 2).toString(2);
 // Input Output Binary(a)
 // 1  			  10           	1
 // 2  			1000           	10
