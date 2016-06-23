@@ -31,6 +31,7 @@ var config = {
   resolve: {
     extensions: ['', '.js', '.jsx']
   },
+  watch: true,
   plugins: [],
   serverPort: serverPort
 };
@@ -60,7 +61,7 @@ gulp.task('phantom', function (done) {
 });
 
 function runInPhantomJs (done) {
-  var args = ['./src/js/app.jsx'];
+  var args = ['./src/js/phantom.jsx'];
   var phantomjsProcess = spawn('../phantomjs/bin/phantomjs.exe', args);
 
   phantomjsProcess.stdout.on('data', function (data) {

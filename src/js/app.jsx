@@ -1,59 +1,67 @@
-var fs = require('fs');
-var id = '7Rv7F77uwLei2xz5p';
-var path = './challenges/';
-var url = 'https://codefights.com/challenge/' + id + '/main';
+function LadderGraph (N) {
+  const prime = 1000000007;
+  // let d = []
+  // d[0] = 1; d[1] = 5
+  // for (let i = 2; i < N; i++) {
+  //   d[i] = (((5 * d[i - 1]) % prime - (2 * d[i - 2]) % prime) + prime) % prime
+  //   console.log(i, d[i] % prime, d[i])
+  // }
+  let matrix = [[0, 1], [-2, 5]];
+  let [[a, b], [c, d]] = pow(matrix, (N - 1) % (prime - 1), prime); // eulers quotient function we can reduce the mod
+  let start = [1, 5];
+  //console.log('a,b ' , a, b);
+  let answer = (((a * start[0] % prime) + (b * start[1] % prime)) + prime) % prime;
+  return answer;
+}
 
-var page = require('webpage').create();
-page.settings.userAgent = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36';
-page.viewportSize = { width: 1920, height: 1080 };
-// page.onResourceRequested = function (request) {
-//   console.log('Request ' + JSON.stringify(request.url, undefined, 4))
-// }
-// page.onResourceReceived = function (response) {
-//   console.log('Receive ' + JSON.stringify(response, undefined, 4))
-// }
-page.onConsoleMessage = function (msg) {
-  console.log(msg);
-};
-page.onLoadFinished = function () {
-  window.setTimeout(function () {
-    // Parse challenge name
-    var challengeName = page.evaluate(function () {
-      var title = document.title; //  <title>Challenge `ConwayRomanSum` | CodeFights</title>
-      var regex = /`(.+)`/;
-      var match = regex.exec(title);
-      if (match.length < 2) console.error('Could not parse the challenge name. Regex did not match: ' + title);
-      return match[1];
-    });
-    console.log('Parsing challenge: ' + challengeName);
+function pow (matrix, exp, mod) {
+  if (exp === 1) return matrix;
+  if (exp % 2 === 0) {
+    let m = pow(matrix, exp / 2, mod);
+    return mult(m, m, mod);
+  } else {
+    return mult(matrix, pow(matrix, exp - 1, mod), mod);
+  }
+}
 
-    // Parse description
-    var description = page.evaluate(function () {
-      var el = document.querySelector('div.Markdown'); // <div data-reactroot="" class="Markdown">
-      if (el == null) console.error('Could not parse the description.');
-      return el.innerHTML;
-    });
-    description = url + '\r\n' + description;
-    console.log('Parsed description.');
-    var realPath = path + challengeName + '-' + id;
-    fs.makeDirectory(realPath);
-    fs.write(realPath + '/' + 'README.md', description, 'w');
-
-    // Parse code
-    var code = page.evaluate(function () {
-      var el = document.querySelectorAll('div.CodeMirror-code .CodeMirror-line'); // line filters out the unwanted line numbers
-      if (el.length === 0) console.error('Could not parse the code. CodeMirror-line list length: ' + el.length);
-      var acc = '';
-      for (var i = 0; i < el.length; i++) {
-        acc += el[i].textContent;
+function mult (a, b, mod) { // a = k x m --- b = m x n
+  let k = a.length, m = a[0].length, n = b[0].length;
+  // c = k x n
+  let c = new Array(k);
+  for (let i = 0; i < k; i++) {
+    c[i] = new Array(n).fill(0);
+    for (let j = 0; j < n; j++) {
+      for (let s = 0; s < m; s++) {
+        c[i][j] = (c[i][j] + multSafe(a[i][s], b[s][j], mod).mod(mod)).mod(mod);
+        //console.log(i, j, s, 'a[i][s]', a[i][s], 'b[s][j]', b[s][j], 'c[i][j]', c[i][j]);
       }
-      return acc;
-    });
-    console.log('Parsed code: ' + code);
-    fs.write(realPath + '/' + challengeName + '.jsx', code, 'w');
+    }
+  }
+  //console.log(c);
+  return c;
+}
 
-    phantom.exit();
-  }, 2000); // javascript on this page needs a lot of time to render
+const MAX_SAFE_INTEGER_SQR = Math.sqrt(Number.MAX_SAFE_INTEGER);	// 9.5 * 10^7
+function multSafe (a, b, mod) { // a,b <= 10^9 + 7^, 	mod = 10^9+7
+  if (a > MAX_SAFE_INTEGER_SQR && b > MAX_SAFE_INTEGER_SQR) {
+    let b_sqr = Math.floor(Math.sqrt(b));
+    let remainder = b - b_sqr * b_sqr;
+    let tmp = a * b_sqr % mod;	// mod will apply here always, because a * b_sqrt > 10^12, and prime is 10^9+7
+    return remainder * a + tmp*b_sqr;
+  }
+  return a * b;
+}
+
+Number.prototype.mod = function (n) {
+  return ((this % n) + n) % n;
 };
 
-page.open(url, function (status) {});
+for (let i = 5; i <= 1000; i++) {
+  console.log(LadderGraph(i)); // 946025
+}
+console.log(Number.MAX_SAFE_INTEGER); // 9 * 10^15 = 2^53 - 1
+console.log(LadderGraph(10)) // 946025
+console.log(LadderGraph(1000)) // 884272384
+console.log(LadderGraph(123456)) // 280556729
+
+// https://oeis.org/A107839
