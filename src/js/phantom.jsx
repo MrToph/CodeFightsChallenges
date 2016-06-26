@@ -1,5 +1,5 @@
 var fs = require('fs');
-var id = 'SN3MKKNQcqL2CqJjp';
+var id = 'a9NhJYdzoBBPnxMJs';
 var path = './challenges/';
 var url = 'https://codefights.com/challenge/' + id + '/main';
 
@@ -22,17 +22,25 @@ page.onLoadFinished = function () {
       var title = document.title; //  <title>Challenge `ConwayRomanSum` | CodeFights</title>
       var regex = /`(.+)`/;
       var match = regex.exec(title);
-      if (match.length < 2) console.error('Could not parse the challenge name. Regex did not match: ' + title);
+      if (match == null || match.length < 2) {
+        console.error('Could not parse the challenge name. Regex did not match: ' + title);
+        return null;
+      }
       return match[1];
     });
+    if (challengeName == null) phantom.exit();
     console.log('Parsing challenge: ' + challengeName);
 
     // Parse description
     var description = page.evaluate(function () {
-      var el = document.querySelector('div.Markdown'); // <div data-reactroot="" class="Markdown">
-      if (el == null) console.error('Could not parse the description.');
+      var el = document.querySelector('div.markdown'); // <div data-reactroot="" class="markdown">
+      if (el == null) {
+        console.error('Could not parse the description.');
+        return null;
+      }
       return el.innerHTML;
     });
+    if (description == null) phantom.exit();
     description = url + '\r\n' + description;
     console.log('Parsed description.');
     var realPath = path + challengeName + '-' + id;
@@ -53,7 +61,7 @@ page.onLoadFinished = function () {
     fs.write(realPath + '/' + challengeName + '.jsx', code, 'w');
 
     phantom.exit();
-  }, 2000); // javascript on this page needs a lot of time to render
+  }, 5000); // javascript on this page needs a lot of time to render
 };
 
 page.open(url, function (status) {});
