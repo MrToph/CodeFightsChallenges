@@ -40,5 +40,3 @@ LongMatrixProduct = (m, n) => {
 //   }
 //   return rec(0, l - 1);
 // }
-
-console.log(LongMatrixProduct([10, 100, 5], [100, 5, 50]));
