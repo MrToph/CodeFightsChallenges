@@ -1,5 +1,5 @@
 var fs = require('fs');
-var id = '4HANW3Rbjcs9TZmMM';
+var id = '3eZwiyP6btWXDxohS';
 var path = './challenges/';
 var url = 'https://codefights.com/challenge/' + id + '/main';
 
