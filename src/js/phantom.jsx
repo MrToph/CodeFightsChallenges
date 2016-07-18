@@ -1,5 +1,5 @@
 var fs = require('fs');
-var id = 'ifSxNwEhkPER6hExe';
+var id = 'PgyG34k9sLZKhTf58';
 var path = './challenges/';
 var url = 'https://codefights.com/challenge/' + id + '/main';
 
@@ -58,7 +58,7 @@ page.onLoadFinished = function () {
       return acc;
     });
     console.log('Parsed code: ' + code);
-    fs.write(realPath + '/' + challengeName + '.jsx', code, 'w');
+    fs.write(realPath + '/' + challengeName + '.js', code, 'w');
 
     phantom.exit();
   }, 5000); // javascript on this page needs a lot of time to render
