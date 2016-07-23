@@ -1,17 +1,11 @@
 var fs = require('fs');
-var id = 'JGpAv9mkqkpCacQm2';
+var id = 'doXskkj8PMAJ27Epk';
 var path = './challenges/';
 var url = 'https://codefights.com/challenge/' + id + '/main';
 
 var page = require('webpage').create();
 page.settings.userAgent = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36';
 page.viewportSize = { width: 1920, height: 1080 };
-// page.onResourceRequested = function (request) {
-//   console.log('Request ' + JSON.stringify(request.url, undefined, 4))
-// }
-// page.onResourceReceived = function (response) {
-//   console.log('Receive ' + JSON.stringify(response, undefined, 4))
-// }
 page.onConsoleMessage = function (msg) {
   console.log(msg);
 };
