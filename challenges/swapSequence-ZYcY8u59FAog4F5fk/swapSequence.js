@@ -1,0 +1,1 @@
+swapSequence = (a, b) => a.split('').sort().join('') == b.split('').sort().join('')
