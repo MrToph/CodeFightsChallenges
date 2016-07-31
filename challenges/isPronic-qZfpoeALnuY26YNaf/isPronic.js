@@ -1,8 +1,5 @@
 S = Math.sqrt
-isPronic = n => {
-    var sqr = S(n) | 0;
-    return sqr * (sqr + 1) == n;
-}
+isPronic = n => (S(n) | 0) * ((S(n) | 0) + 1) == n
 
 
 // function isPronic(n) {
