@@ -1,6 +1,6 @@
 var fs = require('fs');
-var id = 'qZfpoeALnuY26YNaf';
-var path = './challenges/';
+var id = 'jQHANjXgS7D6bR62t';
+var path = './Challenges/';
 var url = 'https://codefights.com/challenge/' + id + '/main';
 
 var page = require('webpage').create();
@@ -38,24 +38,30 @@ page.onLoadFinished = function () {
     description = url + '\r\n' + description;
     console.log('Parsed description.');
     var realPath = path + challengeName + '-' + id;
-    fs.makeDirectory(realPath);
-    fs.write(realPath + '/' + 'README.md', description, 'w');
 
     // Parse code
     var code = page.evaluate(function () {
       var el = document.querySelectorAll('div.CodeMirror-code .CodeMirror-line'); // line filters out the unwanted line numbers
-      if (el.length === 0) console.error('Could not parse the code. CodeMirror-line list length: ' + el.length);
+      if (el == null || el.length === 0){
+        console.error('Could not parse the code. CodeMirror-line list length: ' + (el != null ? el.length));
+        return null
+      }
       var acc = '';
       for (var i = 0; i < el.length; i++) {
         acc += el[i].textContent;
       }
       return acc;
     });
+    if (code == null) phantom.exit();
     console.log('Parsed code: ' + code);
+
+    // everything worked
+    fs.makeDirectory(realPath);
+    fs.write(realPath + '/' + 'README.md', description, 'w');
     fs.write(realPath + '/' + challengeName + '.js', code, 'w');
 
     phantom.exit();
-  }, 2000); // javascript on this page needs a lot of time to render
+  }, 5000); // javascript on this page needs a lot of time to render
 };
 
 page.open(url, function (status) {});
