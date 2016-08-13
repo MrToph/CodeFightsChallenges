@@ -3,8 +3,7 @@ var path = require('path');
 var webpack = require('webpack');
 const spawn = require('child_process').spawn;
 
-var isProduction = false; // process.env.NODE_ENV ? process.env.NODE_ENV.trim() == 'production' : false,
-var serverPort = 8080;
+var isProduction = true; // process.env.NODE_ENV ? process.env.NODE_ENV.trim() == 'production' : false,
 var outputPath = path.join(__dirname, 'src/build');
 var outputFileName = 'all.min.js';
 
@@ -17,23 +16,21 @@ var config = {
     filename: outputFileName
   },
   devtool: isProduction ? null : 'source-map', // eval?
-  module: {
-    loaders: [
-      {
-        test: /\.jsx?$/,
-        loader: 'babel',
-        query: {
-          presets: ['es2015', 'stage-0']
-        }
-      }
-    ]
-  },
-  resolve: {
-    extensions: ['', '.js', '.jsx']
-  },
-  watch: true,
-  plugins: [],
-  serverPort: serverPort
+  // module: {
+  //   loaders: [
+  //     {
+  //       test: /\.jsx?$/,
+  //       loader: 'babel',
+  //       query: {
+  //         presets: ['es2015', 'stage-0']
+  //       }
+  //     }
+  //   ]
+  // },
+  // resolve: {
+  //   extensions: ['', '.js', '.jsx']
+  // },
+  plugins: []
 };
 
 if (isProduction) {
